@@ -1,0 +1,767 @@
+:Luxury Love App para Ro:index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RO — Luxury Private Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body, html {
+            overflow-x: hidden;
+            background-color: #030206;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+        .font-luxury { font-family: 'Cinzel', serif; }
+        
+        /* Glassmorphism de Alta Fidelidad */
+        .glass-card {
+            background: rgba(13, 9, 23, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(244, 63, 94, 0.15);
+        }
+        .glass-premium {
+            background: linear-gradient(135deg, rgba(20, 10, 35, 0.7) 0%, rgba(10, 5, 20, 0.9) 100%);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        /* Destellos Cibernéticos y Neón Sutil */
+        .neon-glow-rose { text-shadow: 0 0 15px rgba(244, 63, 94, 0.6), 0 0 30px rgba(244, 63, 94, 0.3); }
+        .neon-glow-emerald { text-shadow: 0 0 15px rgba(16, 185, 129, 0.6), 0 0 30px rgba(16, 185, 129, 0.3); }
+        .neon-border-spicy { box-shadow: 0 0 35px rgba(225, 29, 72, 0.4), inset 0 0 15px rgba(225, 29, 72, 0.1); }
+        
+        /* Animaciones complejas y Vinilo */
+        .spin-vinyl { animation: spin 8s linear infinite; }
+        .paused { animation-play-state: paused !important; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Ocultar barras de scroll */
+        ::-webkit-scrollbar { display: none; }
+
+        /* Efecto de raspado reflectivo */
+        .scratch-box { position: relative; overflow: hidden; }
+        .scratch-box::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg); transition: 0.5s; pointer-events: none;
+        }
+        .scratch-box:hover::after { transform: translate(50%, 50%) rotate(45deg); }
+    </style>
+</head>
+<body class="text-white select-none">
+
+    <audio id="main-audio" src="audio/song.mp3" loop></audio>
+
+    <canvas id="luxury-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <div id="cinematic-intro" class="fixed inset-0 z-50 bg-[#030206] flex flex-col items-center justify-center p-6 text-center">
+        <div id="intro-text-1" class="opacity-0 space-y-2">
+            <p class="font-luxury tracking-[0.3em] text-xs text-rose-400/70 uppercase">Private Access Authorized</p>
+            <h2 class="font-luxury text-2xl font-light text-neutral-200 tracking-wider">Un espacio privado creado para Ro...</h2>
+        </div>
+        
+        <div id="gift-box-container" class="hidden opacity-0 flex flex-col items-center mt-12 cursor-pointer">
+            <div class="relative w-56 h-56 transform transition-transform duration-500 hover:scale-105 active:scale-95">
+                <div class="absolute inset-0 bg-gradient-to-br from-rose-950/80 via-purple-950/90 to-emerald-950/80 rounded-3xl border border-rose-500/30 shadow-[0_25px_60px_-15px_rgba(244,63,94,0.3)] flex items-center justify-center overflow-hidden backdrop-blur-xl">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent transform -translate-y-full animate-pulse" style="animation-duration: 3s;"></div>
+                    <div id="gift-seal" class="w-20 h-20 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(244,63,94,0.6)] border border-white/20 z-10 animate-bounce" style="animation-duration: 2.5s;">
+                        <span class="text-2xl">🍉</span>
+                        <span class="text-[7px] font-bold tracking-widest text-white uppercase mt-1">OPEN</span>
+                    </div>
+                    <div class="absolute left-0 right-0 h-6 bg-gradient-to-r from-pink-600/60 via-rose-500/80 to-pink-600/60 border-y border-white/10"></div>
+                    <div class="absolute top-0 bottom-0 w-6 bg-gradient-to-b from-pink-600/60 via-rose-500/80 to-pink-600/60 border-x border-white/10"></div>
+                </div>
+            </div>
+            <p class="text-xs text-rose-300/60 font-medium tracking-widest uppercase mt-6 animate-pulse">Rompe el sello para entrar a tu experiencia</p>
+        </div>
+    </div>
+
+    <main id="main-app" class="hidden opacity-0 max-w-md mx-auto px-4 pt-4 relative z-10 flex flex-col gap-6">
+        
+        <div id="qr-toast" class="w-full bg-emerald-950/40 backdrop-blur-xl rounded-2xl p-4 border border-emerald-500/30 flex items-center gap-3 shadow-[0_10px_30px_rgba(16,185,129,0.1)]">
+            <span class="text-xl animate-pulse">🎁</span>
+            <div class="text-left">
+                <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Regalo físico detectado vía QR</h4>
+                <p class="text-[11px] text-gray-300">Watermelon Private Server v38 en línea para Ro.</p>
+            </div>
+        </div>
+
+        <header class="glass-card rounded-3xl p-6 text-center border border-white/5 relative overflow-hidden">
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <p class="font-luxury tracking-[0.4em] text-[10px] text-rose-400 font-bold uppercase mb-1">Exclusive Interactive Volume</p>
+            <h1 class="font-luxury text-4xl font-light text-neutral-100 tracking-wide">LUIS <span class="text-rose-500 font-normal">×</span> RO</h1>
+            <div class="w-8 h-[1px] bg-rose-500/40 mx-auto my-3"></div>
+            <p class="text-xs text-neutral-400 max-w-xs mx-auto leading-relaxed">
+                "Hoy celebramos tus 38 años de vida. Eres mi esposo, mi protector, el hombre increíble que me cuida y me respeta. Toda mi atención y amor te pertenecen."
+            </p>
+        </header>
+
+        <section class="space-y-3">
+            <h3 class="font-luxury text-xs tracking-widest text-rose-400 uppercase pl-1">Las Cosas Que Amo de Ti</h3>
+            <div class="flex overflow-x-auto gap-4 py-2 px-1 snap-x no-scrollbar" id="love-carousel">
+                <div class="glass-premium rounded-2xl p-5 min-w-[260px] max-w-[260px] snap-center flex-shrink-0 flex flex-col gap-3 relative overflow-hidden group border border-white/5" onmousemove="apply3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <span class="text-2xl text-rose-400">🛡️</span>
+                    <h4 class="font-luxury text-sm font-bold text-neutral-200">Cómo me proteges</h4>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">Esa fuerza tranquila e instintiva con la que te aseguras de que jamás me pase nada malo.</p>
+                </div>
+                <div class="glass-premium rounded-2xl p-5 min-w-[260px] max-w-[260px] snap-center flex-shrink-0 flex flex-col gap-3 relative overflow-hidden group border border-white/5" onmousemove="apply3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <span class="text-2xl text-purple-400">🤗</span>
+                    <h4 class="font-luxury text-sm font-bold text-neutral-200">Cómo me abrazas</h4>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">Tus brazos son mi único refugio seguro en el mundo; ahí el tiempo se detiene por completo.</p>
+                </div>
+                <div class="glass-premium rounded-2xl p-5 min-w-[260px] max-w-[260px] snap-center flex-shrink-0 flex flex-col gap-3 relative overflow-hidden group border border-white/5" onmousemove="apply3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <span class="text-2xl text-emerald-400">🏠</span>
+                    <h4 class="font-luxury text-sm font-bold text-neutral-200">Nuestra casita</h4>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">El orgullo inmenso de estar pagando nuestro propio hogar, construyendo un futuro real juntos.</p>
+                </div>
+                <div class="glass-premium rounded-2xl p-5 min-w-[260px] max-w-[260px] snap-center flex-shrink-0 flex flex-col gap-3 relative overflow-hidden group border border-white/5" onmousemove="apply3DTilt(event, this)" onmouseleave="reset3DTilt(this)">
+                    <span class="text-2xl text-amber-400">🌶️</span>
+                    <h4 class="font-luxury text-sm font-bold text-neutral-200">Tu lado travieso</h4>
+                    <p class="text-[11px] text-gray-400 leading-relaxed">Ese toque cachondo e irreverente de tu personalidad que me vuelve completamente loco y me fascina.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 border border-purple-500/20 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-lg text-purple-400">🎵</span>
+                    <h3 class="font-luxury text-xs tracking-widest uppercase">Ro Player Experience</h3>
+                </div>
+                <span class="text-[9px] text-purple-400 font-extrabold bg-purple-950/50 border border-purple-500/30 px-2 py-0.5 rounded-full tracking-wider uppercase">HQ Audio</span>
+            </div>
+
+            <div class="flex flex-col items-center my-2">
+                <div class="relative w-40 h-40 flex items-center justify-center">
+                    <div id="tonearm" class="absolute top-0 right-8 w-10 h-16 origin-top-right transition-transform duration-700 rotate-[15deg] z-20 pointer-events-none">
+                        <svg viewBox="0 0 50 100" class="w-full h-full filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">
+                            <path d="M40,10 L20,10 L20,70 L25,75" fill="none" stroke="#9ca3af" stroke-width="4" stroke-linecap="round"/>
+                            <rect x="20" y="68" width="10" height="12" fill="#e11d48" rx="1"/>
+                            <circle cx="40" cy="10" r="6" fill="#374151"/>
+                        </svg>
+                    </div>
+
+                    <div class="w-full h-full bg-neutral-950 rounded-full border-4 border-neutral-800 flex items-center justify-center shadow-2xl relative overflow-hidden">
+                        <div id="vinyl-disc" class="spin-vinyl paused absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent flex items-center justify-center rounded-full">
+                            <div class="absolute inset-4 border border-neutral-900 rounded-full opacity-70"></div>
+                            <div class="absolute inset-8 border border-neutral-800 rounded-full opacity-60"></div>
+                            <div class="absolute inset-12 border border-neutral-900 rounded-full opacity-50"></div>
+                            <div class="w-14 h-14 bg-gradient-to-br from-rose-500 via-purple-600 to-emerald-500 rounded-full border-4 border-neutral-950 flex items-center justify-center shadow-inner">
+                                <span class="text-[8px] font-bold text-white tracking-widest font-luxury">RO v38</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-end justify-center gap-1.5 h-10 w-full mt-6 px-4" id="audio-visualizer">
+                    <div class="v-bar w-1.5 bg-rose-500 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-pink-500 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-purple-500 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-emerald-500 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-teal-400 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-rose-400 rounded-t-full h-1.5 transition-all"></div>
+                    <div class="v-bar w-1.5 bg-purple-400 rounded-t-full h-1.5 transition-all"></div>
+                </div>
+
+                <button id="player-trigger" onclick="handlePlayerClick(event)" class="mt-6 px-8 py-3 bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 font-luxury text-xs font-bold uppercase tracking-widest rounded-full transition-all shadow-[0_0_25px_rgba(244,63,94,0.3)] border border-white/10 active:scale-95">
+                    Activar Canción Especial
+                </button>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 border border-emerald-500/20 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">🍉</span>
+                    <h3 class="font-luxury text-xs tracking-widest uppercase text-emerald-400">Watermelon Care OS v38</h3>
+                </div>
+                <span class="text-[8px] font-mono text-emerald-400/70 bg-emerald-950/60 border border-emerald-500/30 px-2 py-0.5 rounded-md">SYSTEM ACTIVE</span>
+            </div>
+
+            <div class="w-full bg-black/40 rounded-2xl p-4 border border-white/5 flex flex-col items-center relative overflow-hidden mb-4">
+                <div class="absolute inset-0 bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent z-0"></div>
+                
+                <div class="relative w-full h-32 flex justify-around items-center z-10">
+                    <div class="flex flex-col items-center animate-bounce cursor-pointer group" style="animation-duration: 4s;" onclick="triggerProductStats('Hair Food Sandía', '99%', '100%', 'Abrazos garantizados tras la ducha.')">
+                        <div class="text-4xl filter drop-shadow-[0_8px_10px_rgba(16,185,129,0.4)] transition-transform group-hover:scale-110">🧴</div>
+                        <span class="text-[8px] font-mono text-gray-400 mt-1 uppercase tracking-wider">Hair Food</span>
+                    </div>
+                    <div class="flex flex-col items-center animate-bounce cursor-pointer group" style="animation-duration: 3.2s; animation-delay: 0.5s;" onclick="triggerProductStats('Blumen Body Wash', '95%', '98%', 'Aroma dulce irresistible en toda la piel.')">
+                        <div class="text-4xl filter drop-shadow-[0_8px_10px_rgba(244,63,94,0.4)] transition-transform group-hover:scale-110">🧼</div>
+                        <span class="text-[8px] font-mono text-gray-400 mt-1 uppercase tracking-wider">Body Wash</span>
+                    </div>
+                    <div class="flex flex-col items-center animate-bounce cursor-pointer group" style="animation-duration: 4.5s; animation-delay: 0.2s;" onclick="triggerProductStats('Picagoma Squad', '100%', '85%', 'Sabor picante interno para combinar con tu olor.')">
+                        <div class="text-4xl filter drop-shadow-[0_8px_10px_rgba(251,191,36,0.4)] transition-transform group-hover:scale-110">🍓</div>
+                        <span class="text-[8px] font-mono text-gray-400 mt-1 uppercase tracking-wider">Picagomas</span>
+                    </div>
+                </div>
+
+                <div class="w-full bg-neutral-950/80 rounded-xl p-3 border border-white/5 text-left z-10 mt-2">
+                    <div class="flex justify-between text-[9px] font-mono text-emerald-400 mb-1">
+                        <span>COMPONENT: <span id="stat-name">Selecciona un producto</span></span>
+                        <span>STATUS: OK</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px] mt-1.5 text-gray-300">
+                        <div>Aroma Matrix: <span id="stat-aroma" class="text-white font-bold">-</span></div>
+                        <div>Probabilidad Abrazos: <span id="stat-hugs" class="text-white font-bold">-</span></div>
+                        <div class="col-span-2 text-gray-400 italic text-[9px] border-t border-white/5 pt-1 mt-1" id="stat-desc">Toca los elementos del kit de arriba para ver su análisis de compatibilidad de lujo.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 border border-white/5 space-y-4">
+            <h3 class="font-luxury text-xs tracking-widest text-rose-400 uppercase text-center">Nuestra Historia</h3>
+            <div class="relative border-l border-rose-500/30 ml-3 pl-4 space-y-5 text-xs text-left">
+                <div class="relative">
+                    <span class="absolute -left-[21px] top-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-4 ring-rose-950"></span>
+                    <h5 class="font-luxury text-neutral-200 font-bold">El Inicio</h5>
+                    <p class="text-gray-400 text-[11px] mt-0.5">Conocernos y descubrir que el mundo era mucho mejor si estábamos juntos.</p>
+                </div>
+                <div class="relative">
+                    <span class="absolute -left-[21px] top-1 w-2.5 h-2.5 bg-purple-500 rounded-full ring-4 ring-purple-950"></span>
+                    <h5 class="font-luxury text-neutral-200 font-bold">El "Sí, acepto"</h5>
+                    <p class="text-gray-400 text-[11px] mt-0.5">Nuestra hermosa boda. Convertirnos en esposos ante la ley y ante nuestras promesas de amor.</p>
+                </div>
+                <div class="relative">
+                    <span class="absolute -left-[21px] top-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-4 ring-emerald-950"></span>
+                    <h5 class="font-luxury text-neutral-200 font-bold">Nuestra Nueva Casa</h5>
+                    <p class="text-gray-400 text-[11px] mt-0.5">El esfuerzo diario de estar pagando nuestro espacio propio, decorándolo y haciéndolo nuestro.</p>
+                </div>
+                <div class="relative">
+                    <span class="absolute -left-[21px] top-1 w-2.5 h-2.5 bg-pink-500 rounded-full ring-4 ring-pink-950"></span>
+                    <h5 class="font-luxury text-neutral-200 font-bold">El Futuro de las Pasitas</h5>
+                    <p class="text-gray-400 text-[11px] mt-0.5">Adoptar ejércitos de gatos, hacernos unos expertos absolutos en quitar pelusas y envejecer arrugaditos juntos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-4 border border-white/5">
+            <div class="relative w-full h-32 bg-neutral-950/40 rounded-2xl overflow-hidden flex flex-col items-center justify-end pb-3 cursor-pointer" onclick="triggerRaisinKiss(event)">
+                <div class="absolute top-2 left-3 text-[8px] font-mono text-gray-500 uppercase tracking-widest">Diorama Holográfico</div>
+                <div class="flex gap-16 relative z-10 transition-transform duration-500" id="raisins-node">
+                    <div class="flex flex-col items-center id-he transition-transform duration-500">
+                        <span class="text-3xl filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">🍇</span>
+                        <span class="text-[8px] text-purple-400 font-bold tracking-wider uppercase mt-1">Ro</span>
+                    </div>
+                    <div class="flex flex-col items-center id-she transition-transform duration-500">
+                        <span class="text-3xl filter drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)]">🍇</span>
+                        <span class="text-[8px] text-pink-400 font-bold tracking-wider uppercase mt-1">Luis</span>
+                    </div>
+                </div>
+                <span id="kiss-node" class="absolute bottom-10 text-xl opacity-0 scale-0 transition-all duration-300 pointer-events-none">💖</span>
+            </div>
+        </section>
+
+        <section class="space-y-3">
+            <h3 class="font-luxury text-xs tracking-widest text-rose-400 uppercase pl-1">Mensajes Íntimos Secretos</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-premium rounded-2xl p-4 text-center cursor-pointer border border-white/5 relative group" onclick="openSecretEnvelope(this, 'Recuerdo que desde el primer día me hiciste sentir seguro. Gracias por ser mi lugar seguro en todo momento.')">
+                    <span class="text-2xl block group-hover:scale-110 transition-transform">✉️</span>
+                    <span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest mt-1 block">Sobre Privado I</span>
+                </div>
+                <div class="glass-premium rounded-2xl p-4 text-center cursor-pointer border border-white/5 relative group" onclick="openSecretEnvelope(this, 'Me encanta que aunque siempre me prestas más atención de la que pido, yo amo devolverte cada detalle. Eres increíble.')">
+                    <span class="text-2xl block group-hover:scale-110 transition-transform">✉️</span>
+                    <span class="text-[10px] font-mono text-gray-400 uppercase tracking-widest mt-1 block">Sobre Privado II</span>
+                </div>
+            </div>
+            <div id="envelope-display" class="hidden glass-card rounded-2xl p-4 border border-rose-500/20 text-xs italic text-rose-300 text-center animate-fade-in"></div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 border border-teal-500/20">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-luxury text-xs tracking-widest text-teal-400 uppercase">Cat Hair Simulator Deluxe</h3>
+                <span id="game-score" class="text-[9px] font-mono text-teal-300 bg-teal-950/50 px-2 py-0.5 rounded border border-teal-500/30">COMBO: 0X</span>
+            </div>
+            
+            <div class="relative w-full aspect-[4/5] bg-zinc-950 rounded-2xl overflow-hidden border border-white/5" id="game-canvas-area">
+                <div class="absolute w-44 h-56 bg-neutral-900 rounded-t-2xl border border-neutral-800 shadow-2xl top-12 left-1/2 transform -translate-x-1/2 pointer-events-none opacity-40"></div>
+                <canvas id="hair-canvas" class="absolute inset-0 w-full h-full z-10 cursor-crosshair touch-none"></canvas>
+                
+                <div class="absolute bottom-3 left-3 right-3 bg-black/85 backdrop-blur-md px-3 py-2 rounded-xl z-20 flex justify-between items-center text-[11px]">
+                    <span class="text-teal-400 font-bold">Eficiencia: <span id="clean-percent">0</span>%</span>
+                    <span id="game-status" class="text-gray-400 font-mono font-bold">PRO LEVEL RADAR</span>
+                </div>
+
+                <div id="game-victory" class="absolute inset-0 bg-neutral-950/95 z-30 flex flex-col items-center justify-center p-6 text-center hidden">
+                    <span class="text-5xl animate-pulse">🏆</span>
+                    <h4 class="font-luxury text-base font-bold text-teal-300 mt-2">DIPLOMA SUPREMO DE EXPERTOS</h4>
+                    <p class="text-[9px] font-mono text-gray-500 uppercase tracking-widest mt-1">Emitido por Luis con todo mi amor</p>
+                    <p class="text-xs text-gray-200 mt-4 leading-relaxed max-w-xs">
+                        "Certificamos que **Ro** es un maestro absoluto nivel leyenda en control de pelusas, garantizando una vida feliz rodeados de ejércitos de gatos sin un solo pelo en la ropa negra."
+                    </p>
+                    <button onclick="resetDeluxeGame()" class="mt-6 text-[10px] font-bold font-luxury bg-teal-600/20 text-teal-300 px-4 py-2 rounded-xl border border-teal-500/40 uppercase tracking-widest hover:bg-teal-600/40 transition-all">
+                        Limpiar Nueva Prenda
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card rounded-3xl p-6 border border-rose-900/30 transition-all duration-700" id="spicy-block">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span id="spicy-indicator" class="text-xl">😈</span>
+                    <div>
+                        <h3 class="font-luxury text-xs tracking-widest uppercase text-neutral-300" id="spicy-head-title">Acceso Clasificado</h3>
+                        <p class="text-[10px] text-gray-500 font-mono" id="spicy-head-desc">ZONA PRIVADA JUGUETONA</p>
+                    </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer select-none">
+                    <input type="checkbox" id="spicy-toggle" onchange="handleSpicySystem()" class="sr-only peer">
+                    <div class="w-10 h-5 bg-neutral-800 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-neutral-500 after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-600 peer-checked:after:bg-white"></div>
+                </label>
+            </div>
+
+            <div id="spicy-content" class="hidden flex flex-col gap-4 mt-4 animate-fade-in">
+                <div class="h-[1px] bg-rose-500/20 my-1"></div>
+                <p class="text-xs text-rose-300/80 leading-relaxed text-center italic">
+                    "Me encanta tu lado cachondo, Ro. Es parte de la chispa perfecta entre nosotros. Aquí tienes tus tres vales de cumpleaños exclusivos para que tú y yo vayamos a **hacer cositas** deliciosas:"
+                </p>
+
+                <div class="space-y-3">
+                    <div class="relative bg-zinc-950/80 rounded-2xl p-4 border border-rose-500/10 overflow-hidden min-h-[90px] flex items-center scratch-box">
+                        <div class="w-full relative z-0 text-left">
+                            <span class="text-[9px] font-mono text-rose-400 font-bold uppercase tracking-wider">Vale de Luis #1</span>
+                            <h4 class="font-luxury text-xs font-bold text-white mt-0.5">Masaje Corporal Premium con Aroma a Sandía 🍉</h4>
+                            <p class="text-[10px] text-gray-400 mt-1">Caricias infinitas para relajarte por completo y consentir todo tu cuerpo.</p>
+                        </div>
+                        <canvas id="sc-1" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></canvas>
+                    </div>
+                    <div class="relative bg-zinc-950/80 rounded-2xl p-4 border border-rose-500/10 overflow-hidden min-h-[90px] flex items-center scratch-box">
+                        <div class="w-full relative z-0 text-left">
+                            <span class="text-[9px] font-mono text-rose-400 font-bold uppercase tracking-wider">Vale de Luis #2</span>
+                            <h4 class="font-luxury text-xs font-bold text-white mt-0.5">Noche Íntima al Ritmo de Madonna 🎤🔥</h4>
+                            <p class="text-[10px] text-gray-400 mt-1">Tú eliges los tracks de fondo favoritos y pones las reglas para hacer cositas ricas en la intimidad.</p>
+                        </div>
+                        <canvas id="sc-2" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></canvas>
+                    </div>
+                    <div class="relative bg-zinc-950/80 rounded-2xl p-4 border border-rose-500/10 overflow-hidden min-h-[90px] flex items-center scratch-box">
+                        <div class="w-full relative z-0 text-left">
+                            <span class="text-[9px] font-mono text-rose-400 font-bold uppercase tracking-wider">Vale de Luis #3</span>
+                            <h4 class="font-luxury text-xs font-bold text-white mt-0.5">Sesión Completa de Mimos y Atención Absoluta 💖</h4>
+                            <p class="text-[10px] text-gray-400 mt-1">Yo me clavo al 100% en adorarte, besarte y cumplir tus caprichos todo el día.</p>
+                        </div>
+                        <canvas id="sc-3" class="absolute inset-0 w-full h-full z-10 cursor-pointer"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="glass-card rounded-3xl p-6 border border-white/5 text-center space-y-4 relative overflow-hidden mb-8" id="epic-footer">
+            <span class="text-4xl block animate-pulse">🍇❤️🍇</span>
+            <div class="space-y-3 text-xs text-gray-300 leading-relaxed">
+                <p class="f-line opacity-0">Sé perfectamente cuánto te desvives por cuidarme y darme tu atención todos los días, Ro.</p>
+                <p class="f-line opacity-0">Quiero que sepas que me doy cuenta de cada pequeño detalle, de tu tierno respeto y de tu corazón inmenso.</p>
+                <p class="f-line opacity-0">No me importa cuántos pelos de gato tengamos que limpiar de la ropa negra, ni los años que nos tome liquidar nuestra casita hermosa.</p>
+                <p class="f-line opacity-0 font-medium text-rose-300">Mi único plan de vida perfecto es hacerme pasita arrugada a tu lado.</p>
+            </div>
+            
+            <div class="pt-4 border-t border-white/5 space-y-1">
+                <h4 class="font-luxury text-sm font-bold tracking-[0.2em] text-neutral-200 opacity-0 final-text">GRACIAS POR EXISTIR, RO.</h4>
+                <p class="text-[11px] font-luxury text-rose-400 tracking-widest opacity-0 final-text">FELIZ CUMPLEAÑOS, MI ESPOSO.</p>
+                <p class="text-[10px] font-mono text-gray-500 opacity-0 final-text">Te amo infinito. — Luis</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // AUDIO & MASTER CONTROL STATE
+        const bgAudio = document.getElementById('main-audio');
+        let appPlaying = false;
+        let visualizerInterval = null;
+
+        // INTRO NARRATIVE GSAP RUNNER
+        window.addEventListener('DOMContentLoaded', () => {
+            const hasOpened = localStorage.getItem('luxuryBoxOpenedv38');
+            
+            // GSAP Intro Sequencer
+            let tl = gsap.timeline();
+            tl.to("#intro-text-1", { opacity: 1, duration: 1.5, y: -10, ease: "power2.out" })
+              .to("#intro-text-1", { opacity: 0, duration: 1, y: -20, delay: 1.5, ease: "power2.in" });
+            
+            tl.call(() => {
+                const boxContainer = document.getElementById('gift-box-container');
+                boxContainer.classList.remove('hidden');
+                gsap.to(boxContainer, { opacity: 1, duration: 1.2, y: -10, ease: "power3.out" });
+                
+                // Si ya fue abierta anteriormente, omitimos animaciones bruscas
+                if(hasOpened) {
+                    document.getElementById('gift-seal').innerText = "🔓";
+                }
+            });
+
+            // Registrar disparadores de scroll suave para las líneas del final cinematográfico
+            setupFooterScrollReveal();
+        });
+
+        // MECÁNICA DE APERTURA DE LA CAJA PREMIUM
+        function verifyBirthdayBoy(e) {
+            // Trigger haptic response on active devices
+            if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
+            
+            // Efecto explosión de partículas de sandías y estrellas de lujo
+            generateParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, '🍉', 15);
+            generateParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, '✨', 10);
+
+            localStorage.setItem('luxuryBoxOpenedv38', 'true');
+
+            // Transición fluida cinematográfica hacia la aplicación principal
+            gsap.to("#cinematic-intro", {
+                opacity: 0, duration: 1.2, scale: 1.05, ease: "power4.inOut", onComplete: () => {
+                    document.getElementById('cinematic-intro').style.display = 'none';
+                    const mainApp = document.getElementById('main-app');
+                    mainApp.classList.remove('hidden');
+                    gsap.to(mainApp, { opacity: 1, duration: 1.5, ease: "power3.out" });
+                }
+            });
+        }
+        document.getElementById('gift-box-container').addEventListener('click', verifyBirthdayBoy);
+
+        // NATIVE AUDIO ENGINE TRACK CONTROLLER
+        function handlePlayerClick(e) {
+            const vinyl = document.getElementById('vinyl-disc');
+            const arm = document.getElementById('tonearm');
+            const triggerBtn = document.getElementById('player-trigger');
+
+            if (!appPlaying) {
+                bgAudio.play().then(() => {
+                    appPlaying = true;
+                    vinyl.classList.remove('paused');
+                    arm.style.transform = 'rotate(28deg)';
+                    triggerBtn.innerText = "Pausar Reproducción";
+                    triggerBtn.classList.add('from-emerald-600', 'to-teal-600');
+                    startVisualizerGlow();
+                    generateParticles(window.innerWidth / 2, window.innerHeight / 2, '🎵', 12);
+                }).catch(err => console.log("Audio contextual restrictions applied:", err));
+            } else {
+                bgAudio.pause();
+                appPlaying = false;
+                vinyl.classList.add('paused');
+                arm.style.transform = 'rotate(15deg)';
+                triggerBtn.innerText = "Activar Canción Especial";
+                triggerBtn.classList.remove('from-emerald-600', 'to-teal-600');
+                stopVisualizerGlow();
+            }
+        }
+
+        function startVisualizerGlow() {
+            visualizerInterval = setInterval(() => {
+                document.querySelectorAll('.v-bar').forEach(bar => {
+                    bar.style.height = (Math.floor(Math.random() * 32) + 6) + 'px';
+                });
+            }, 120);
+        }
+
+        function stopVisualizerGlow() {
+            clearInterval(visualizerInterval);
+            document.querySelectorAll('.v-bar').forEach(bar => bar.style.height = '6px');
+        }
+
+        // 3D GLASSMOPHISM TILT INTERACTION ENGINE
+        function apply3DTilt(e, element) {
+            const rect = element.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const xc = rect.width / 2;
+            const yc = rect.height / 2;
+            
+            const tiltX = (yc - y) / 10;
+            const tiltY = (x - xc) / 10;
+            
+            element.style.transform = `perspective(500px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+        }
+
+        function reset3DTilt(element) {
+            element.style.transform = `perspective(500px) rotateX(0deg) rotateY(0deg) scale(1)`;
+        }
+
+        // WATERMELON OS DIGITAL STATS PARSER
+        function triggerProductStats(name, aroma, hugs, desc) {
+            if (navigator.vibrate) navigator.vibrate(30);
+            document.getElementById('stat-name').innerText = name;
+            document.getElementById('stat-aroma').innerText = aroma;
+            document.getElementById('stat-hugs').innerText = hugs;
+            document.getElementById('stat-desc').innerText = desc;
+        }
+
+        // DIORAMA HOLODRAW INTERACTIVO (KISS ENGINE)
+        let raisinProcessing = false;
+        function triggerRaisinKiss(e) {
+            if (raisinProcessing) return;
+            raisinProcessing = true;
+            
+            const pair = document.getElementById('raisins-node');
+            const kissNode = document.getElementById('kiss-node');
+
+            generateParticles(e.clientX || window.innerWidth/2, e.clientY || window.innerHeight/2, '✨', 5);
+            pair.style.transform = 'scale(0.95)';
+
+            setTimeout(() => {
+                kissNode.style.opacity = '1';
+                kissNode.style.transform = 'scale(2) translateY(-25px)';
+                generateParticles(window.innerWidth/2, window.innerHeight/2, '💖', 10);
+            }, 200);
+
+            setTimeout(() => {
+                pair.style.transform = 'scale(1)';
+                kissNode.style.opacity = '0';
+                kissNode.style.transform = 'scale(0) translateY(0)';
+                raisinProcessing = false;
+            }, 1600);
+        }
+
+        // INTERFAZ DE ENVELOPE / CARTAS SECRETAS ÍNTIMAS
+        function openSecretEnvelope(element, message) {
+            if (navigator.vibrate) navigator.vibrate(40);
+            const display = document.getElementById('envelope-display');
+            display.classList.remove('hidden');
+            display.innerText = message;
+            
+            // Animación GSAP sutil de desvanecimiento
+            gsap.fromTo(display, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 });
+        }
+
+        // MASTER LUXURY CANVAS MOLECULES GENERATOR
+        const canvas = document.getElementById('luxury-particles');
+        const ctx = canvas.getContext('2d');
+        let atoms = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class ParticleAtom {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * canvas.height;
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 2 + 1;
+                this.speedY = Math.random() * 0.6 + 0.2;
+                this.alpha = Math.random() * 0.4 + 0.1;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < -10) this.reset();
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(244, 63, 94, ${this.alpha})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 45; i++) atoms.push(new ParticleAtom());
+
+        function loopAtoms() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            atoms.forEach(a => { a.update(); a.draw(); });
+            requestAnimationFrame(loopAtoms);
+        }
+        loopAtoms();
+
+        // PARTÍCULAS INTERACTIVAS DINÁMICAS (EMOJIS)
+        function generateParticles(x, y, char, count = 8) {
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle fixed pointer-events-none z-50 text-xl';
+                p.innerText = char;
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+                document.body.appendChild(p);
+
+                const tx = (Math.random() * 160 - 80);
+                const ty = (Math.random() * 160 - 80) - 100;
+
+                p.animate([
+                    { transform: 'translate(0,0) scale(0.6)', opacity: 0 },
+                    { transform: 'translate('+(tx*0.2)+'px, '+(ty*0.2)+'px) scale(1.2)', opacity: 1, offset: 0.2 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0.6)`, opacity: 0 }
+                ], { duration: 1600, easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)' });
+
+                setTimeout(() => p.remove(), 1600);
+            }
+        }
+
+        // CAT HAIR SIMULATOR DELUXE ENGINE (FÍSICA MEJORADA)
+        const gameCanvas = document.getElementById('hair-canvas');
+        const gCtx = gameCanvas.getContext('2d');
+        let furSquad = [];
+        let furTotal = 130;
+        let activeScratchingGame = false;
+
+        function buildFurGame() {
+            const container = document.getElementById('game-canvas-area');
+            gameCanvas.width = container.clientWidth;
+            gameCanvas.height = container.clientHeight;
+            furSquad = [];
+            for (let i = 0; i < furTotal; i++) {
+                furSquad.push({
+                    x: Math.random() * (gameCanvas.width * 0.6) + (gameCanvas.width * 0.2),
+                    y: Math.random() * (gameCanvas.height * 0.5) + (gameCanvas.height * 0.2),
+                    len: Math.random() * 10 + 8,
+                    rot: Math.random() * Math.PI * 2,
+                    done: false
+                });
+            }
+            drawFur();
+        }
+
+        function drawFur() {
+            gCtx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+            let active = 0;
+            furSquad.forEach(f => {
+                if (!f.done) {
+                    gCtx.beginPath();
+                    gCtx.moveTo(f.x, f.y);
+                    gCtx.lineTo(f.x + Math.cos(f.rot)*f.len, f.y + Math.sin(f.rot)*f.len);
+                    gCtx.strokeStyle = 'rgba(240, 240, 240, 0.85)';
+                    gCtx.lineWidth = 1.8;
+                    gCtx.stroke();
+                    active++;
+                }
+            });
+
+            const percentage = Math.round(((furTotal - active) / furTotal) * 100);
+            document.getElementById('clean-percent').innerText = percentage;
+            
+            if (percentage >= 98) {
+                document.getElementById('game-victory').classList.remove('hidden');
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }
+        }
+
+        function sweepFur(clientX, clientY) {
+            const rect = gameCanvas.getBoundingClientRect();
+            const mx = clientX - rect.left;
+            const my = clientY - rect.top;
+            let updated = false;
+
+            furSquad.forEach(f => {
+                if (!f.done && Math.hypot(f.x - mx, f.y - my) < 22) {
+                    f.done = true;
+                    updated = true;
+                }
+            });
+
+            if (updated) {
+                drawFur();
+                document.getElementById('game-score').innerText = "COMBO: HIGH PRO";
+            }
+        }
+
+        gameCanvas.addEventListener('mousedown', (e) => { activeScratchingGame = true; sweepFur(e.clientX, e.clientY); });
+        gameCanvas.addEventListener('mousemove', (e) => { if (activeScratchingGame) sweepFur(e.clientX, e.clientY); });
+        gameCanvas.addEventListener('touchstart', (e) => { activeScratchingGame = true; sweepFur(e.touches[0].clientX, e.touches[0].clientY); });
+        gameCanvas.addEventListener('touchmove', (e) => { if (activeScratchingGame) { e.preventDefault(); sweepFur(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:false});
+        window.addEventListener('mouseup', () => activeScratchingGame = false);
+        window.addEventListener('touchend', () => activeScratchingGame = false);
+
+        function resetDeluxeGame() {
+            document.getElementById('game-victory').classList.add('hidden');
+            document.getElementById('game-score').innerText = "COMBO: 0X";
+            buildFurGame();
+        }
+        setTimeout(buildFurGame, 200);
+
+        // COQUETO VELVET LUXURY: CONTROLADOR MODO TRAVIESO / HACER COSITAS
+        function handleSpicySystem() {
+            const checked = document.getElementById('spicy-toggle').checked;
+            const block = document.getElementById('spicy-block');
+            const content = document.getElementById('spicy-content');
+            
+            if (checked) {
+                block.classList.remove('border-rose-900/30');
+                block.classList.add('border-rose-600/80', 'neon-border-spicy', 'bg-rose-950/20');
+                content.classList.remove('hidden');
+                document.getElementById('spicy-indicator').innerText = '🌶️';
+                document.getElementById('spicy-head-title').innerText = "¡Modo Travieso Concedido!";
+                document.getElementById('spicy-head-title').classList.add('text-rose-400', 'neon-text-rose');
+                document.getElementById('spicy-head-desc').innerText = "VAMOS A HACER COSITAS, MI AMOR";
+                if (navigator.vibrate) navigator.vibrate([60, 30, 60]);
+                setTimeout(startScratchCardsEngine, 150);
+            } else {
+                block.classList.add('border-rose-900/30');
+                block.classList.remove('border-rose-600/80', 'neon-border-spicy', 'bg-rose-950/20');
+                content.classList.add('hidden');
+                document.getElementById('spicy-indicator').innerText = '😈';
+                document.getElementById('spicy-head-title').innerText = "Acceso Clasificado";
+                document.getElementById('spicy-head-title').classList.remove('text-rose-400', 'neon-text-rose');
+                document.getElementById('spicy-head-desc').innerText = "ZONA PRIVADA JUGUETONA";
+            }
+        }
+
+        function startScratchCardsEngine() {
+            ['sc-1', 'sc-2', 'sc-3'].forEach(id => {
+                const cvs = document.getElementById(id);
+                if (!cvs) return;
+                const parent = cvs.parentNode;
+                cvs.width = parent.clientWidth;
+                cvs.height = parent.clientHeight;
+                const sCtx = cvs.getContext('2d');
+                
+                // Capa metalizada color terciopelo oscuro luxury
+                sCtx.fillStyle = '#1e111d';
+                sCtx.fillRect(0, 0, cvs.width, cvs.height);
+                sCtx.font = 'bold 10px Outfit, sans-serif';
+                sCtx.fillStyle = '#f43f5e';
+                sCtx.textAlign = 'center';
+                sCtx.textBaseline = 'middle';
+                sCtx.fillText('🔥 DESTELLO PARA HACER COSITAS 🔥', cvs.width / 2, cvs.height / 2);
+
+                let rubbing = false;
+                function rub(cx, cy) {
+                    const r = cvs.getBoundingClientRect();
+                    sCtx.globalCompositeOperation = 'destination-out';
+                    sCtx.beginPath();
+                    sCtx.arc(cx - r.left, cy - r.top, 20, 0, Math.PI * 2);
+                    sCtx.fill();
+                }
+
+                cvs.addEventListener('mousedown', (e) => { rubbing = true; rub(e.clientX, e.clientY); });
+                cvs.addEventListener('mousemove', (e) => { if (rubbing) rub(e.clientX, e.clientY); });
+                cvs.addEventListener('touchstart', (e) => { rubbing = true; rub(e.touches[0].clientX, e.touches[0].clientY); });
+                cvs.addEventListener('touchmove', (e) => { if (rubbing) { e.preventDefault(); rub(e.touches[0].clientX, e.touches[0].clientY); } }, {passive:false});
+                window.addEventListener('mouseup', () => rubbing = false);
+                window.addEventListener('touchend', () => rubbing = false);
+            });
+        }
+
+        // SCROLL REVEAL CINEMATOGRÁFICO PARA EL FINAL ÉPICO
+        function setupFooterScrollReveal() {
+            window.addEventListener('scroll', () => {
+                const footer = document.getElementById('epic-footer');
+                const rect = footer.getBoundingClientRect();
+                
+                // Si el footer entra en el viewport del móvil
+                if(rect.top < window.innerHeight * 0.85) {
+                    gsap.to(".f-line", { opacity: 1, y: 0, duration: 1.2, stagger: 0.4, ease: "power2.out" });
+                    gsap.to(".final-text", { opacity: 1, duration: 1.5, delay: 1.8, stagger: 0.3 });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+
+### Puntos Narrativos de Lujo que se adaptaron a la App:
+* **Entrada Cinematográfica:** Al escanear el QR, se le dará una cordial bienvenida formal con un aviso de que el servidor privado ha sido verificado. Tras tocar el listón del sello virtual de la caja de sandías, la interfaz se desvanece de forma fluida hacia la app.
+* **Vocabulario Íntimo e Identidad:** Toda la aplicación está diseñada eliminando variables de género heteronormativas, adaptando la jerga secreta de ustedes (*"hacer cositas"*) y llamando a los elementos por sus nombres exactos (**Luis y Ro**).
+* **Integración del Kit de Sandía Real:** Los productos que obsequiarás en físico se presentan en un showcase interactivo similar al de los anuncios comerciales de marcas exclusivas de *skincare*, donde él puede verificar de manera divertida sus niveles de aroma y la probabilidad de recibir abrazos.
+* **Estabilidad Absoluta:** La etiqueta de audio apunta de forma nativa a `audio/song.mp3` para asegurar una reproducción impecable con controles directos en pantalla.
+
